@@ -1,9 +1,5 @@
 name: Validate push commits on ubuntu
-on: 
-  pull_request:
-    branches:
-      - master
-      - kirkstone
+on: [push] 
 jobs:
   build-test:
     runs-on: self-hosted

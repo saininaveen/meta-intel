@@ -8,14 +8,14 @@ target: core-image-minimal
 repos:
   poky:
     url: https://git.yoctoproject.org/git/poky
-    refspec: kirkstone
+    refspec: master
     layers:
       meta:
       meta-poky:
 
   meta-openembedded:
     url: http://git.openembedded.org/meta-openembedded
-    refspec: kirkstone
+    refspec: master
     path: poky/meta-openembedded
     layers:
       meta-oe:
@@ -24,7 +24,7 @@ repos:
   meta-intel:
     url: https://git.yoctoproject.org/meta-intel
     path: poky/meta-intel
-    refspec: kirkstone
+    refspec: master
 
 local_conf_header:
   standard: |
