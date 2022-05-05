@@ -1,0 +1,24 @@
+name: Validate pull commits on ubuntu
+on: 
+  pull_request:
+    branches:
+      - master
+      - kirkstone 
+jobs:
+  build-test:
+    runs-on: self-hosted
+    steps:
+      - name: Clean up workspace
+        uses: AutoModality/action-clean@v1
+      - name: Check out repository code
+        uses: actions/checkout@v2
+      - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
+      - name: List files in the repository
+        run: |
+          ls ${{ github.workspace }}
+          git branch
+      - name: build core-image-minimal image
+        run: |
+          cd ${{ github.workspace }}
+          kas checkout kas/intel-corei7-64-minimal.yml
+      - run: echo "🍏 This job's status is ${{ job.status }}."
