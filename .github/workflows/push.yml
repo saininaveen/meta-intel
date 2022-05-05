@@ -6,25 +6,24 @@ jobs:
     steps:
       - name: Check out repository code
         uses: actions/checkout@v2
-      - name: List files in the repository
-        run: |
-          ls ${{ github.workspace }}
-      - name: Checkout build core-image-minimal image
+      - name: Build image/recipes
         run: |
           cd ${{ github.workspace }}
           git branch
+          cat .git/config
           git remote add upstream https://git.yoctoproject.org/meta-intel
+          echo "NNN"
           git fetch upstream
-          VAR=$(git diff --name-only master-dev upstream/master | awk -F"/" '{print $NF}' | awk '/.bb/{print}' | awk -F"_" '{print $1}' | awk -F".bb" '{print $1}')
-          echo $VAR
-      - name: conditional command
-        run: |
+          echo "PPP"
+          VAR=$(git diff --name-only upstream/master | awk -F"/" '{print $NF}' | awk '/.bb/{print}' | awk -F"_" '{print $1}' | awk -F".bb" '{print $1}')
+          echo "recipes updated: " $VAR
+          git remote remove upstream
+          export KAS_TARGET="$VAR"
           if [ -z "$VAR" ]; then
-              # run the one command
+              # Just run kas repo checkout
               kas checkout kas/intel-corei7-64-minimal.yml
           else
-              # run the other command
-              kas build kas/intel-corei7-64-minimal.yml --target $VAR
+              # Build affected recipe targets
+              kas build kas/intel-corei7-64-minimal.yml
           fi
-          cat build/conf/bblayers.conf
       - run: echo "🍏 This job's status is ${{ job.status }}."
