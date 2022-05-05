@@ -9,10 +9,22 @@ jobs:
       - name: List files in the repository
         run: |
           ls ${{ github.workspace }}
-          git branch
       - name: Checkout build core-image-minimal image
         run: |
           cd ${{ github.workspace }}
-          kas checkout kas/intel-corei7-64-minimal.yml
+          git branch
+          git remote add upstream https://git.yoctoproject.org/meta-intel
+          git fetch upstream
+          VAR=$(git diff --name-only master-dev upstream/master | awk -F"/" '{print $NF}' | awk '/.bb/{print}' | awk -F"_" '{print $1}' | awk -F".bb" '{print $1}')
+          echo $VAR
+      - name: conditional command
+        run: |
+          if [ -z "$VAR" ]; then
+              # run the one command
+              kas checkout kas/intel-corei7-64-minimal.yml
+          else
+              # run the other command
+              kas build kas/intel-corei7-64-minimal.yml --target $VAR
+          fi
           cat build/conf/bblayers.conf
       - run: echo "🍏 This job's status is ${{ job.status }}."
