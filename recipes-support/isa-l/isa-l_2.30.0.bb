@@ -15,3 +15,4 @@ DEPENDS = "nasm-native"
 AS[unexport] = "1"
 
 COMPATIBLE_HOST = '(x86_64).*-linux'
+# Naveen
